@@ -9,10 +9,29 @@
 ## Requirements
 
 * Windows 7 or newer with .NET 3.5+
+* For some functions, administrative access is required
 
 ## Getting Started
 
 On Windows, a network connection is assigned a "profile": Domain, Private, or Public. The Microsoft firewall can be enabled/disabled for any or all profiles. Similarly, rules can be configured for any or all profiles.
+
+```> msfw -h
+msfw 0.1
+
+  -p, --profile     (Default: ) Firewall profile.
+  -l, --list        (Default: False) List out rules
+  -c, --count       (Default: False) Count rules
+  --local-rules     (Default: False) Only include local rules
+  --policy-rules    (Default: False) Only include local rules
+  -n, --rulename    (Default: ) Rule Name
+  --dir             (Default: ) Rule Direction [in, out]
+  --status          (Default: enabled) Rule Status [enabled,disabled,all]
+  --action          (Default: ) Rule Action [allow, block]
+  --local           (Default: System.String[]) Rule Local Address and Ports
+  --remote          (Default: System.String[]) Rule Remote Address and Ports
+  --protocol        (Default: ) Rule Protocol
+  --app             (Default: ) Rule Application or Service
+  --help            Display this help screen.```
 
 ## Configure Firewall
 To see if your firewall is currently enabled, run the following:
@@ -33,13 +52,17 @@ Rules, additionally, can be created locally or pushed down via group policy. Rul
 
 By default, msfw will not display disabled rules in the list. If you want to include disabled rules, then include the following flag:
 
-List ALL rules
+List all rules
 
-```msfw rule -l --include-disabled```
+```msfw rule -l --status all```
 
 List enabled rules
 
 ```msfw rule -l```
+
+List disabled rules
+
+```msfw rule -l --status all```
 
 List <profile> rules
 
@@ -116,3 +139,20 @@ List TCP protocol rules
 List ICMP protocol rules
 
 ```msfw rule -l --protocol icmp```
+
+## Version history
+* 0.1 2016-10-08 Initial release. Documentation of status and rule subcommands
+* 0.2 2016-10-XX Documentation of log subcommands
+* 0.3 2016-11-XX Release of msfw binary with status, rule, and log subcommands
+* 0.4 2016-11-XX Bug fixes
+* 0.5 2016-11-XX Bug fixes
+* 0.6 2016-12-XX Release of msfw binary with rule creation subcommands
+* 1.0 2017-01-01 Release of code and msfw binary with rule creation subcommands
+
+## License
+
+msfw is licensed under MIT.
+
+## Other libraries
+
+[CommandLineParser](https://github.com/gsscoder/commandline)
