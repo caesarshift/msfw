@@ -15,7 +15,8 @@
 
 On Windows, a network connection is assigned a "profile": Domain, Private, or Public. The Microsoft firewall can be enabled/disabled for any or all profiles. Similarly, rules can be configured for any or all profiles.
 
-```> msfw -h
+```
+> msfw -h
 msfw 0.1
 
   -p, --profile     (Default: ) Firewall profile.
@@ -39,7 +40,8 @@ To see if your firewall is currently enabled, run the following:
 
 **msfw status** : Display firewall status information
 
-```> msfw status
+```
+> msfw status
 'Windows Firewall' Service: Running
 Domain: Enabled:Inactive
 Private: Enabled:Active
@@ -53,8 +55,10 @@ Public: Enabled:Inactive
 
 **`msfw status -p [domain|private|public]`** : Display firewall status information for a profile
 
-```> msfw status -p private
-Private: Enabled:Active```
+```
+> msfw status -p private
+Private: Enabled:Active
+```
 
 ## Configure Rules
 
