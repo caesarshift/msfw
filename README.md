@@ -38,6 +38,8 @@ msfw 0.1
 ## Configure Firewall
 To see if your firewall is currently enabled, run the following:
 
+### **```msfw status```**
+
 **`msfw status`** : Display firewall status information
 
 ```
@@ -64,11 +66,24 @@ Private: Enabled:Active
 
 Rules, additionally, can be created locally or pushed down via group policy. Rules can also be disabled/enabled.
 
-By default, msfw will not display disabled rules in the list. If you want to include disabled rules, then include the following flag:
+### ```msfw rule```
 
-**`msfw rule -l --status all`** : List all rules
+List rule details or count the number of rules found
 
-**`msfw rule -l`** : List enabled rules
+* Use `-l` to see a list of rules
+* Use `-c` to see a count of rules
+
+**`msfw rule -l --status [enabled,disabled,all]`** : List rules. Default is `--status enabled`
+
+```
+> msfw rule -l
+"Profile","Action","Direction","Application","Local","Remote","Protocol","Name"
+"--,Pr,--","Allow","Out","System","*:*","LocalSubnet:138","Udp","Network Discovery (NB-Datagram-Out)"
+"--,Pr,--","Allow","In","System","*:138","LocalSubnet:*","Udp","Network Discovery (NB-Datagram-In)"
+"Do,Pr,Pu","Allow","Out","%SystemRoot%\system32\svchost.exe:dnscache","*:*","*:53","Udp","Core Networking - DNS (UDP-Out)"
+"Do,--,--","Allow","Out","System","*:*","*:445","Tcp","Core Networking - Group Policy (NP-Out)"
+"Do,Pr,Pu","Allow","In","System","*:*","*:*","IPv6","Core Networking - IPv6 (IPv6-In)"
+```
 
 **`msfw rule -l --status all`** : List disabled rules
 
@@ -112,13 +127,13 @@ By default, msfw will not display disabled rules in the list. If you want to inc
 **`msfw rule -l --protocol icmp`** : List ICMP protocol rules
 
 ## Version history
-* **0.1** 2016-10-08 - Initial release. Documentation of status and rule subcommands.
-* **0.2** 2016-10-XX - Documentation of log subcommands.
-* **0.3** 2016-11-XX - Release of msfw binary with status, rule, and log subcommands.
-* **0.4** 2016-11-XX - Bug fixes.
-* **0.5** 2016-12-XX - Release of msfw binary with status change and log change subcommands.
-* **0.6** 2016-12-XX - Bug fixes.
-* **1.0** 2017-01-01 - Release of code and msfw binary with rule creation subcommands.
+* **0.1** (2016-10-08) - Initial release. Documentation of status and rule subcommands.
+* **0.2** (2016-10-XX) - Documentation of log subcommands.
+* **0.3** (2016-11-XX) - Release of msfw binary with status, rule, and log subcommands.
+* **0.4** (2016-11-XX) - Bug fixes.
+* **0.5** (2016-12-XX) - Release of msfw binary with status change and log change subcommands.
+* **0.6** (2016-12-XX) - Bug fixes.
+* **1.0** (2017-01-01) - Release of code and msfw binary with rule creation subcommands.
 
 ## License
 
