@@ -36,15 +36,23 @@ msfw 0.1
 ## Configure Firewall
 To see if your firewall is currently enabled, run the following:
 
-```msfw status```
+**msfw status** : Display firewall status information
 
-If you see "Enabled", then your firewall is turned on.
+```> msfw status
+'Windows Firewall' Service: Running
+Domain: Enabled:Inactive
+Private: Enabled:Active
+Public: Enabled:Inactive```
 
-If you see "Inactive", then you do not currently have any networks connected to the given profile.
+* "Enabled": Firewall is turned on
+* "Disabled": Firewall is turned off
+* "Active": Firewall is associated with a profile that has at least one active network connection
+* "Inactive": Firewall is not associated with a profile that has an active network connection
 
-To check a particular domain, just add the "profile" name:
+**msfw status -p [domain|private|public]** : Display firewall status information for a profile
 
-```msfw status -p private```
+```> msfw status -p private
+Private: Enabled:Active```
 
 ## Configure Rules
 
@@ -151,8 +159,8 @@ List ICMP protocol rules
 
 ## License
 
-msfw is licensed under MIT.
+msfw is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php)
 
-## Other libraries
+## Other libraries used by msfw
 
-[CommandLineParser](https://github.com/gsscoder/commandline)
+[CommandLineParser](https://github.com/gsscoder/commandline) *MIT License*
