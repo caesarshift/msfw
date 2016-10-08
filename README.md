@@ -38,7 +38,7 @@ msfw 0.1
 ## Configure Firewall
 To see if your firewall is currently enabled, run the following:
 
-**msfw status** : Display firewall status information
+**`msfw status`** : Display firewall status information
 
 ```
 > msfw status
@@ -66,102 +66,59 @@ Rules, additionally, can be created locally or pushed down via group policy. Rul
 
 By default, msfw will not display disabled rules in the list. If you want to include disabled rules, then include the following flag:
 
-List all rules
+**`msfw rule -l --status all`** : List all rules
 
-```msfw rule -l --status all```
+**`msfw rule -l`** : List enabled rules
 
-List enabled rules
+**`msfw rule -l --status all`** : List disabled rules
 
-```msfw rule -l```
+**`msfw rule -l -p private`** :  List <profile> rules
 
-List disabled rules
+**`msfw rule -l --local-rules`** : List local (not group policy) rules
 
-```msfw rule -l --status all```
+**`msfw rule -l --policy-rules`** : List group policy rules
 
-List <profile> rules
 
-```msfw rule -l -p private```
+**`msfw rule -l -n "Rule Name"`** : List rule <name> (case insensitive)
 
-List local (not group policy) rules:
+**`msfw rule -l --dir in`** : List inbound rules
 
-```msfw rule -l --local-rules```
+**`msfw rule -l --dir out`** : List outbound rules
 
-List group policy rules:
+**`msfw rule -l --action allow`** : List allow rules
 
-```msfw rule -l --policy-rules```
+**`msfw rule -l --action block`** : List block rules
 
-List rule <name> (case insensitive):
+**`msfw rule -l --local *:* --dir in --action allow`** : List allow rules with any:any local address/ports
 
-```msfw rule -l -n "Rule Name"```
+**`msfw rule -l --local *:* --dir in --action allow`** : List allow rules with any:any local address/ports
 
-List inbound rules
+**`msfw rule -l --remote *:* --dir in --action allow`** : List inbound, allow rules with any:any remote address/ports
 
-```msfw rule -l --dir in```
+**`msfw rule -l --local 10.10.10.10:* --dir in --action allow`** : List inbound, allow rules with a local IP and any port
 
-List outbound rules
+**`msfw rule -l --local *:443 --dir in --action allow`** : List inbound, allow rules with any local IP but a single port
 
-```msfw rule -l --dir out```
+**`msfw rule -l --local *:* --remote *:* --dir in --action allow`** : List inbound, allow rule with any/any local AND any/any remote addresses/ports
 
-List allow rules
+**`msfw rule -l --local *:* --remote *:* --dir in --app * --action allow`** : List allow rules with any/any local AND any/any remote addresses/ports AND any application
 
-```msfw rule -l --action allow```
+**`msfw rule -l --app svchost.exe`** : List windows service rules
 
-List block rules
+**`msfw rule -l --app upnphost`** : List windows <service>
 
-```msfw rule -l --action block```
+**`msfw rule -l --protocol tcp`** : List TCP protocol rules
 
-List allow rules with any:any local address/ports
-
-```msfw rule -l --local *:* --dir in --action allow```
-
-List allow rules with any:any local address/ports
-
-```msfw rule -l --local *:* --dir in --action allow```
-
-List inbound, allow rules with any:any remote address/ports
-
-```msfw rule -l --remote *:* --dir in --action allow```
-
-List inbound, allow rules with a local IP and any port
-
-```msfw rule -l --local 10.10.10.10:* --dir in --action allow```
-
-List inbound, allow rules with any local IP but a single port
-
-```msfw rule -l --local *:443 --dir in --action allow```
-
-List inbound, allow rule with any/any local AND any/any remote addresses/ports
-
-```msfw rule -l --local *:* --remote *:* --dir in --action allow```
-
-List allow rules with any/any local AND any/any remote addresses/ports AND any application
-
-```msfw rule -l --local *:* --remote *:* --dir in --app * --action allow```
-
-List windows service rules
-
-```msfw rule -l --app svchost.exe```
-
-List windows <service>
-
-```msfw rule -l --app upnphost```
-
-List TCP protocol rules
-
-```msfw rule -l --protocol tcp```
-
-List ICMP protocol rules
-
-```msfw rule -l --protocol icmp```
+**`msfw rule -l --protocol icmp`** : List ICMP protocol rules
 
 ## Version history
-* 0.1 2016-10-08 Initial release. Documentation of status and rule subcommands
-* 0.2 2016-10-XX Documentation of log subcommands
-* 0.3 2016-11-XX Release of msfw binary with status, rule, and log subcommands
-* 0.4 2016-11-XX Bug fixes
-* 0.5 2016-11-XX Bug fixes
-* 0.6 2016-12-XX Release of msfw binary with rule creation subcommands
-* 1.0 2017-01-01 Release of code and msfw binary with rule creation subcommands
+* **0.1** 2016-10-08 - Initial release. Documentation of status and rule subcommands.
+* **0.2** 2016-10-XX - Documentation of log subcommands.
+* **0.3** 2016-11-XX - Release of msfw binary with status, rule, and log subcommands.
+* **0.4** 2016-11-XX - Bug fixes.
+* **0.5** 2016-12-XX - Release of msfw binary with status change and log change subcommands.
+* **0.6** 2016-12-XX - Bug fixes.
+* **1.0** 2017-01-01 - Release of code and msfw binary with rule creation subcommands.
 
 ## License
 
