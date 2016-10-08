@@ -73,7 +73,9 @@ List rule details or count the number of rules found
 * Use `-l` to see a list of rules
 * Use `-c` to see a count of rules
 
-**`msfw rule -l --status [enabled,disabled,all]`** : List rules. Default is `--status enabled`
+**`msfw rule -l --status [enabled,disabled,all]`** : List rules by status.
+
+**Default** is `--status enabled`
 
 ```
 > msfw rule -l
@@ -85,46 +87,58 @@ List rule details or count the number of rules found
 "Do,Pr,Pu","Allow","In","System","*:*","*:*","IPv6","Core Networking - IPv6 (IPv6-In)"
 ```
 
-**`msfw rule -l --status all`** : List disabled rules
+```
+> msfw rule -c
+Rule count: 219
+```
 
-**`msfw rule -l -p private`** :  List <profile> rules
+**`msfw rule -l -p [domain|private|public|all]`** :  List enabled <profile> rules
 
-**`msfw rule -l --local-rules`** : List local (not group policy) rules
+** Default** is `-p all`
 
-**`msfw rule -l --policy-rules`** : List group policy rules
+```
+> msfw rule -l -p private
+"Profile","Action","Direction","Application","Local","Remote","Protocol","Name"
+"--,Pr,--","Allow","Out","System","*:*","LocalSubnet:138","Udp","Network Discovery (NB-Datagram-Out)"
+"Do,Pr,Pu","Allow","In","System","*:*","*:*","IPv6","Core Networking - IPv6 (IPv6-In)"
+[snip]
+```
 
+**`msfw rule -l --local-rules`** : List enabled local (not group policy) rules
 
-**`msfw rule -l -n "Rule Name"`** : List rule <name> (case insensitive)
+**`msfw rule -l --policy-rules`** : List enabled group policy rules
 
-**`msfw rule -l --dir in`** : List inbound rules
+**`msfw rule -l -n "Rule Name"`** : List enabled rule <name> (case insensitive)
 
-**`msfw rule -l --dir out`** : List outbound rules
+**`msfw rule -l --dir in`** : List enabled inbound rules
 
-**`msfw rule -l --action allow`** : List allow rules
+**`msfw rule -l --dir out`** : List enabled outbound rules
 
-**`msfw rule -l --action block`** : List block rules
+**`msfw rule -l --action allow`** : List enabled allow rules
 
-**`msfw rule -l --local *:* --dir in --action allow`** : List allow rules with any:any local address/ports
+**`msfw rule -l --action block`** : List enabled block rules
 
-**`msfw rule -l --local *:* --dir in --action allow`** : List allow rules with any:any local address/ports
+**`msfw rule -l --local *:* --dir in --action allow`** : List enabled allow rules with any:any local address/ports
 
-**`msfw rule -l --remote *:* --dir in --action allow`** : List inbound, allow rules with any:any remote address/ports
+**`msfw rule -l --local *:* --dir in --action allow`** : List enabled allow rules with any:any local address/ports
 
-**`msfw rule -l --local 10.10.10.10:* --dir in --action allow`** : List inbound, allow rules with a local IP and any port
+**`msfw rule -l --remote *:* --dir in --action allow`** : List enabled inbound, allow rules with any:any remote address/ports
 
-**`msfw rule -l --local *:443 --dir in --action allow`** : List inbound, allow rules with any local IP but a single port
+**`msfw rule -l --local 10.10.10.10:* --dir in --action allow`** : List enabled inbound, allow rules with a local IP and any port
 
-**`msfw rule -l --local *:* --remote *:* --dir in --action allow`** : List inbound, allow rule with any/any local AND any/any remote addresses/ports
+**`msfw rule -l --local *:443 --dir in --action allow`** : List enabled inbound, allow rules with any local IP but a single port
 
-**`msfw rule -l --local *:* --remote *:* --dir in --app * --action allow`** : List allow rules with any/any local AND any/any remote addresses/ports AND any application
+**`msfw rule -l --local *:* --remote *:* --dir in --action allow`** : List enabled inbound, allow rule with any/any local AND any/any remote addresses/ports
 
-**`msfw rule -l --app svchost.exe`** : List windows service rules
+**`msfw rule -l --local *:* --remote *:* --dir in --app * --action allow`** : List enabled allow rules with any/any local AND any/any remote addresses/ports AND any application
 
-**`msfw rule -l --app upnphost`** : List windows <service>
+**`msfw rule -l --app svchost.exe`** : List enabled windows service rules
 
-**`msfw rule -l --protocol tcp`** : List TCP protocol rules
+**`msfw rule -l --app upnphost`** : List enabled windows <service>
 
-**`msfw rule -l --protocol icmp`** : List ICMP protocol rules
+**`msfw rule -l --protocol tcp`** : List enabled TCP protocol rules
+
+**`msfw rule -l --protocol icmp`** : List enabled ICMP protocol rules
 
 ## Version history
 * **0.1** (2016-10-08) - Initial release. Documentation of status and rule subcommands.
@@ -137,8 +151,8 @@ List rule details or count the number of rules found
 
 ## License
 
-msfw is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php)
+msfw is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php).
 
 ## Other libraries used by msfw
 
-[CommandLineParser](https://github.com/gsscoder/commandline) *MIT License*
+[CommandLineParser](https://github.com/gsscoder/commandline) *(MIT License)*
