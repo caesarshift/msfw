@@ -92,9 +92,9 @@ List rule details or count the number of rules found
 Rule count: 219
 ```
 
-**`msfw rule -l -p [domain|private|public|all]`** :  List enabled <profile> rules
+**`msfw rule -l -p [domain|private|public|all]`** :  List enabled [profile] rules
 
-** Default** is `-p all`
+**Default** is `-p all`
 
 ```
 > msfw rule -l -p private
