@@ -31,7 +31,8 @@ msfw 0.1
   --remote          (Default: System.String[]) Rule Remote Address and Ports
   --protocol        (Default: ) Rule Protocol
   --app             (Default: ) Rule Application or Service
-  --help            Display this help screen.```
+  --help            Display this help screen.
+```
 
 ## Configure Firewall
 To see if your firewall is currently enabled, run the following:
@@ -42,14 +43,15 @@ To see if your firewall is currently enabled, run the following:
 'Windows Firewall' Service: Running
 Domain: Enabled:Inactive
 Private: Enabled:Active
-Public: Enabled:Inactive```
+Public: Enabled:Inactive
+```
 
 * "Enabled": Firewall is turned on
 * "Disabled": Firewall is turned off
 * "Active": Firewall is associated with a profile that has at least one active network connection
 * "Inactive": Firewall is not associated with a profile that has an active network connection
 
-**msfw status -p [domain|private|public]** : Display firewall status information for a profile
+**`msfw status -p [domain|private|public]`** : Display firewall status information for a profile
 
 ```> msfw status -p private
 Private: Enabled:Active```
