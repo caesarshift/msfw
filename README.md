@@ -1,7 +1,8 @@
 # Microsoft&reg; Firewall (msfw)
 
 **Please note that this tool is not affiliated with, created by, or associated with Microsoft Corporation.**
-**Microsoft, Encarta, MSN, and Windows are either registered trademarks or trademarks of Microsoft Corporation in the United States and/or other countries.**
+
+*Microsoft, Encarta, MSN, and Windows are either registered trademarks or trademarks of Microsoft Corporation in the United States and/or other countries.*
 
 ## Goal: Provide a simple solution to using the Windows Firewall
 
@@ -13,27 +14,30 @@
 
 On Windows, a network connection is assigned a "profile": Domain, Private, or Public. The Microsoft firewall can be enabled/disabled for any or all profiles. Similarly, rules can be configured for any or all profiles.
 
-# Configure Firewall
+## Configure Firewall
 To see if your firewall is currently enabled, run the following:
 
 ```msfw status```
 
 If you see "Enabled", then your firewall is turned on.
+
 If you see "Inactive", then you do not currently have any networks connected to the given profile.
 
 To check a particular domain, just add the "profile" name:
 
 ```msfw status -p private```
 
-# Configure Rules
+## Configure Rules
 
 Rules, additionally, can be created locally or pushed down via group policy. Rules can also be disabled/enabled.
 
 By default, msfw will not display disabled rules in the list. If you want to include disabled rules, then include the following flag:
 
-TBD
+List ALL rules
 
-List all enabled rules
+```msfw rule -l --include-disabled```
+
+List enabled rules
 
 ```msfw rule -l```
 
