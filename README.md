@@ -8,6 +8,15 @@
 
 ## Why
 
+1. No completed CLI solution for configuring or monitoring
+  * CLI solution does not list results in a tabular format
+  * Does not work in an enterprise environment as it does not show group policy status (if group policy enables firewall, built in tool does not show firewall as running)
+  * Overcomplicated commands (in my opinion) and missing features (find rules that meet 'X' criteria)
+1. Incomplete Logging
+  * Built-in logging is disabled by default
+  * Built-in logging does not show executable associated with a blocked packet
+  * No CLI access to logs in a reasonable format
+
 ## Requirements
 
 * Windows 7 or newer with .NET 3.5+
