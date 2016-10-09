@@ -73,9 +73,11 @@ List rule details or count the number of rules found
 * Use `-l` to see a list of rules
 * Use `-c` to see a count of rules
 
-### ```msfw rule **--status**```
+#### ```msfw rule --status```
 
-**`msfw rule -l --status [enabled,disabled,all]`** : List rules by status.
+List rules by status.
+
+**`msfw rule -l --status [enabled,disabled,all]`**
 
 **Default** is `--status enabled`
 
@@ -94,7 +96,11 @@ List rule details or count the number of rules found
 Rule count: 219
 ```
 
-**`msfw rule -l -p [domain|private|public|all]`** :  List enabled [profile] rules
+#### ```msfw rule -p <profile>```
+
+List rules by profile
+
+**`msfw rule -l -p [domain|private|public|all]`**
 
 **Default** is `-p all`
 
