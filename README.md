@@ -73,6 +73,8 @@ List rule details or count the number of rules found
 * Use `-l` to see a list of rules
 * Use `-c` to see a count of rules
 
+### ```msfw rule **--status**```
+
 **`msfw rule -l --status [enabled,disabled,all]`** : List rules by status.
 
 **Default** is `--status enabled`
