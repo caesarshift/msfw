@@ -77,7 +77,7 @@ List rule details or count the number of rules found
 
 Definition: List rules by status.
 
-Syntax: **`msfw rule -l [-s,--status] [enabled,disabled,all]`**
+Syntax: **`msfw rule -l --status [enabled,disabled,all]`**
 
 Default: `--status enabled`
 
@@ -94,7 +94,7 @@ Example: List enabled rules
 
 Example: Count all rules
 ```
-> msfw rule -c -s all
+> msfw rule -c --status all
 Rule count: 219
 ```
 
@@ -121,51 +121,175 @@ Defintion: List rules by action.
 
 Syntax: **`msfw rule -l --action [{allow,block}]`**
 
-Default: All
+Default: Both
 
-Example: List allow rules
+Example: List enabled, allow rules
 ```
 > msfw rule -l --action allow
 ```
 
-Example: List block rules
+Example: List enabled, block rules
 ```
-msfw rule -l --action block
+> msfw rule -l --action block
 ```
 
+#### ```msfw rule --rulename```
 
-**`msfw rule -l --local-rules`** : List enabled local (not group policy) rules
+Defintion: List rule by name (case insensitive full string match)
 
-**`msfw rule -l --policy-rules`** : List enabled group policy rules
+Syntax: **`msfw rule -l [-n|--rulename] <rulename>`**
 
-**`msfw rule -l -n "Rule Name"`** : List enabled rule <name> (case insensitive)
+Default: None
 
-**`msfw rule -l --dir in`** : List enabled inbound rules
+Example: List enabled rule with name "Rule Name"
+```
+> msfw rule -l -n "Rule Name"
+```
 
-**`msfw rule -l --dir out`** : List enabled outbound rules
+#### ```msfw rule --dir```
 
+Defintion: List rule by direction
 
-**`msfw rule -l --local *:* --dir in --action allow`** : List enabled allow rules with any:any local address/ports
+Syntax: **`msfw rule -l [--dir [{in,out}]`**
 
-**`msfw rule -l --local *:* --dir in --action allow`** : List enabled allow rules with any:any local address/ports
+Default: Both
 
-**`msfw rule -l --remote *:* --dir in --action allow`** : List enabled inbound, allow rules with any:any remote address/ports
+Example: List enabled, inbound rules
+```
+> msfw rule -l --dir in"
+```
 
-**`msfw rule -l --local 10.10.10.10:* --dir in --action allow`** : List enabled inbound, allow rules with a local IP and any port
+Example: List enabled, outbound rules
+```
+> msfw rule -l --dir out"
+```
 
-**`msfw rule -l --local *:443 --dir in --action allow`** : List enabled inbound, allow rules with any local IP but a single port
+#### ```msfw rule --local```
 
-**`msfw rule -l --local *:* --remote *:* --dir in --action allow`** : List enabled inbound, allow rule with any/any local AND any/any remote addresses/ports
+Defintion: List rules by local ports and addresses
 
-**`msfw rule -l --local *:* --remote *:* --dir in --app * --action allow`** : List enabled allow rules with any/any local AND any/any remote addresses/ports AND any application
+Syntax: **`msfw rule -l --local <address>:<port>`**
 
-**`msfw rule -l --app svchost.exe`** : List enabled windows service rules
+Default: All
 
-**`msfw rule -l --app upnphost`** : List enabled windows <service>
+Example: List enabled, any:any local address/port rule
+```
+> msfw rule -l --local *:*
+```
 
-**`msfw rule -l --protocol tcp`** : List enabled TCP protocol rules
+Example: List enabled, inbound, allow rules with any:any local address/port
+```
+> msfw rule -l --local *:* --dir in --action allow
+```
 
-**`msfw rule -l --protocol icmp`** : List enabled ICMP protocol rules
+Example: List enabled, inbound, allow rules with single IP and any port
+```
+> msfw rule -l --local 10.10.10.10:* --dir in --action allow
+```
+
+Example: List enabled, inbound, allow rules with any local IP but a single port
+```
+> msfw rule -l --local *:443 --dir in --action allow
+```
+
+#### ```msfw rule --remote```
+
+Defintion: List rules by remote ports and addresses
+
+Syntax: **`msfw rule -l --remote <address>:<port>`**
+
+Default: All
+
+Example: List enabled, any:any remote address/port rule
+```
+> msfw rule -l --remote *:*
+```
+
+Example: List enabled inbound, allow rules with any:any remote address/ports
+```
+> msfw rule -l --remote *:* --dir in --action allow
+```
+
+Example: List enabled inbound, allow rule with any/any local AND any/any remote addresses/ports
+```
+> msfw rule -l --local *:* --remote *:* --dir in --action allow
+```
+
+Example: List enabled inbound, allow rule with any/any local AND any/any remote addresses/ports
+```
+> msfw rule -l --local *:* --remote *:* --dir in --action allow
+```
+
+#### ```msfw rule --protocol```
+
+Defintion: List rules by protocol
+
+Syntax: **`msfw rule -l --protocol <protocol>`**
+
+Default: All
+
+Example: List enabled, tcp rules
+```
+> msfw rule -l --protocol tcp
+```
+
+Example: List enabled, icmp rules
+```
+> msfw rule -l --protocol icmp
+```
+
+#### ```msfw rule --app```
+
+Defintion: List rules by application (or service). Base filename is used for case insensitive full string match
+
+Syntax: **`msfw rule -l --app <name>`**
+
+Default: All
+
+Example: List enabled, Windows service rules
+```
+> msfw rule -l --app svchost.exe
+```
+
+Example: List enabled, "java.exe" rules
+```
+> msfw rule -l --app java.exe
+```
+
+Example: List enabled, Windows service rules
+```
+> msfw rule -l --app svchost.exe
+```
+
+Example: List enabled, Windows service uPnP rules
+```
+> msfw rule -l --app upnphost
+```
+
+#### ```Common msfw rules```
+
+Example: List enabled allow rules with any/any local AND any/any remote addresses/ports AND any application
+```
+> msfw rule -l --local *:* --remote *:* --dir in --app * --action allow
+```
+
+#### ```msfw rule --scope```
+
+Defintion: List rules by scope (local and/or group policy)
+
+Syntax: **`msfw rule -l --scope [{local,policy}]`**
+
+Default: All
+
+Example: List enabled, local rules
+```
+> msfw rule -l --scope local
+```
+
+Example: List enabled, group policy rules
+```
+> msfw rule -l --scope policy
+```
 
 ## Version history
 * **0.1** (2016-10-08) - Initial release. Documentation of status and rule subcommands.
