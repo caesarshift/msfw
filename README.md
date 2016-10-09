@@ -75,12 +75,13 @@ List rule details or count the number of rules found
 
 #### ```msfw rule --status```
 
-List rules by status.
+Definition: List rules by status.
 
-**`msfw rule -l --status [enabled,disabled,all]`**
+Syntax: **`msfw rule -l [-s,--status] [enabled,disabled,all]`**
 
-**Default** is `--status enabled`
+Default: `--status enabled`
 
+Example: List enabled rules
 ```
 > msfw rule -l
 "Profile","Action","Direction","Application","Local","Remote","Protocol","Name"
@@ -91,8 +92,9 @@ List rules by status.
 "Do,Pr,Pu","Allow","In","System","*:*","*:*","IPv6","Core Networking - IPv6 (IPv6-In)"
 ```
 
+Example: Count all rules
 ```
-> msfw rule -c
+> msfw rule -c -s all
 Rule count: 219
 ```
 
