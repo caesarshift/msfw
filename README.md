@@ -98,14 +98,15 @@ Example: Count all rules
 Rule count: 219
 ```
 
-#### ```msfw rule -p <profile>```
+#### ```msfw rule [-p,--profile] <profile>```
 
-List rules by profile
+Defintion: List rules by profile
 
-**`msfw rule -l -p [domain|private|public|all]`**
+Syntax: **`msfw rule -l -p [{domain|private|public|all}]`**
 
-**Default** is `-p all`
+Default: `-p all`
 
+Example: List enabled, private profile rules
 ```
 > msfw rule -l -p private
 "Profile","Action","Direction","Application","Local","Remote","Protocol","Name"
@@ -113,6 +114,25 @@ List rules by profile
 "Do,Pr,Pu","Allow","In","System","*:*","*:*","IPv6","Core Networking - IPv6 (IPv6-In)"
 [snip]
 ```
+
+#### ```msfw rule --action```
+
+Defintion: List rules by action.
+
+Syntax: **`msfw rule -l --action [{allow,block}]`**
+
+Default: All
+
+Example: List allow rules
+```
+> msfw rule -l --action allow
+```
+
+Example: List block rules
+```
+msfw rule -l --action block
+```
+
 
 **`msfw rule -l --local-rules`** : List enabled local (not group policy) rules
 
@@ -124,9 +144,6 @@ List rules by profile
 
 **`msfw rule -l --dir out`** : List enabled outbound rules
 
-**`msfw rule -l --action allow`** : List enabled allow rules
-
-**`msfw rule -l --action block`** : List enabled block rules
 
 **`msfw rule -l --local *:* --dir in --action allow`** : List enabled allow rules with any:any local address/ports
 
