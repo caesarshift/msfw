@@ -6,10 +6,12 @@
 
 ## Goal: Provide a simple solution to using the Windows Firewall
 
+## Why
+
 ## Requirements
 
 * Windows 7 or newer with .NET 3.5+
-* For some functions, administrative access is required
+* For some functions, administrative privileges are required
 
 ## Getting Started
 
@@ -18,21 +20,22 @@ On Windows, a network connection is assigned a "profile": Domain, Private, or Pu
 ```
 > msfw -h
 msfw 0.1
-
-  -p, --profile     (Default: ) Firewall profile.
-  -l, --list        (Default: False) List out rules
-  -c, --count       (Default: False) Count rules
-  --local-rules     (Default: False) Only include local rules
-  --policy-rules    (Default: False) Only include local rules
-  -n, --rulename    (Default: ) Rule Name
-  --dir             (Default: ) Rule Direction [in, out]
-  --status          (Default: enabled) Rule Status [enabled,disabled,all]
-  --action          (Default: ) Rule Action [allow, block]
-  --local           (Default: System.String[]) Rule Local Address and Ports
-  --remote          (Default: System.String[]) Rule Remote Address and Ports
-  --protocol        (Default: ) Rule Protocol
-  --app             (Default: ) Rule Application or Service
-  --help            Display this help screen.
+  status
+    -p, --profile     (Default: all) Firewall profile.
+  rule
+    -l, --list        (Default: False) List out rules
+    -c, --count       (Default: False) Count rules
+    -p, --profile     (Default: all) Firewall profile.
+    -n, --rulename    (Default: ) Rule Name
+    --dir             (Default: ) Rule Direction [in, out]
+    --status          (Default: enabled) Rule Status [enabled,disabled,all]
+    --scope           (Default: False) Rule Scope [local,policy]
+    --action          (Default: ) Rule Action [allow, block]
+    --local           (Default: System.String[]) Rule Local Address and Ports
+    --remote          (Default: System.String[]) Rule Remote Address and Ports
+    --protocol        (Default: ) Rule Protocol
+    --app             (Default: ) Rule Application or Service
+    --help            Display this help screen.
 ```
 
 ## Configure Firewall
@@ -60,6 +63,111 @@ Public: Enabled:Inactive
 ```
 > msfw status -p private
 Private: Enabled:Active
+```
+
+### **```msfw log```**  **(Requires admin privileges)**
+
+Displays the "Filtering Platform Packet Drop" auditing of failures. The built-in firewall logging is not used as it does not display the application/service name associated with a blocked packet. The drawback is that filtering cannot be enabled for a specific profile.
+
+#### ```msfw log --status``` **(Requires admin privileges)**
+
+Definition: Display firewall log status.
+
+Syntax: **`msfw log [-s,--status]`**
+
+Example:
+```
+> msfw log -s
+Filter logging: True
+```
+
+#### ```msfw log --enable``` **(Requires admin privileges)**
+
+Definition: Enable firewall logging.
+
+Syntax: **`msfw log [-e,--enable]`**
+
+Example:
+```
+> msfw log -e
+Action: Enable log (requires admin privileges)
+The command was successfully executed.
+```
+
+#### ```msfw log --disable``` **(Requires admin privileges)**
+
+Definition: Disable firewall logging.
+
+Syntax: **`msfw log [-d,--disable]`**
+
+Example:
+```
+> msfw log -d
+Action: Disable log (requires admin privileges)
+The command was successfully executed.
+```
+
+#### ```msfw log --list``` **(Requires admin privileges)**
+
+Definition: List firewall logs.
+
+Syntax: **`msfw log [-l,--list]`**
+
+Example:
+```
+> msfw log -l
+Retrieving Logs since: 2016-10-09 14:30:43
+Retrieving Logs since (UTC): 2016-10-09 19:30:43
+10/9/2016 2:31:06 PM \device\harddiskvolume1\program files (x86)\landesk\ldclient\issuser.exe Out 10.10.10.10 42801 5.5.5.5 443 Tcp
+10/9/2016 2:31:08 PM \device\harddiskvolume1\windows\system32\svchost.exe In 0.0.0.0 68 255.255.255.255 67 Udp
+```
+
+#### ```msfw log --l --shortapp``` **(Requires admin privileges)**
+
+Definition: List application name only (not full path)
+
+Syntax: **`msfw log -l [--shortapp]`**
+
+Example:
+```
+> msfw log -l --shortapp
+Retrieving Logs since: 2016-10-09 14:30:43
+Retrieving Logs since (UTC): 2016-10-09 19:30:43
+10/9/2016 2:31:06 PM issuser.exe Out 10.10.10.10 42801 5.5.5.5 443 Tcp
+10/9/2016 2:31:08 PM svchost.exe In 0.0.0.0 68 255.255.255.255 67 Udp
+```
+
+#### ```msfw log -l --since``` **(Requires admin privileges)**
+
+Definition: List firewall logs since datetime
+
+Syntax: **`msfw log -l [--since <datetimestring>]`**
+
+Example:
+```
+> msfw log -l --since "2016-10-10 12:00:00 PM"
+```
+
+Example:
+```
+> msfw log -l --since "2016-10-10 14:00:00 PM"
+```
+
+#### ```msfw log -l --last``` **(Requires admin privileges)**
+
+Definition: List firewall logs in last hours, minutes, or seconds
+
+Syntax: **`msfw log -l [--last <duration>]`**
+
+
+Example:
+```
+> msfw log -l --last 5m
+```
+
+Example:
+```
+> msfw log -l --last 30s
 ```
 
 ## Configure Rules
