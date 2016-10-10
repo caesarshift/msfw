@@ -4,18 +4,20 @@
 
 *Microsoft, Encarta, MSN, and Windows are either registered trademarks or trademarks of Microsoft Corporation in the United States and/or other countries.*
 
-## Goal: Provide a simple solution to using the Windows Firewall
+## Goal: Provide a simple command line interface to the built-in Windows Firewall
 
 ## Why
 
-1. No complete CLI solution for configuring or monitoring
-  * CLI solution does not list results in a tabular format
-  * Does not work in an enterprise environment as it does not show group policy status (if group policy enables firewall, built in tool does not show firewall as running)
-  * Overly complicated commands (in my opinion) and missing features (find rules that meet 'X' criteria)
-1. Incomplete Logging
-  * Built-in logging is disabled by default
-  * Built-in logging does not show executable associated with a blocked packet
-  * No CLI access to logs in a reasonable format
+1. No complete command line solution for configuring or monitoring the Windows firewall
+  * "netsh advfirewall" solution does not list rule results in a tabular format
+  * "netsh advfirewall" does not work with group policy
+    * If group policy enables firewall, "netsh" does not show firewall as running
+    * If group policy pushes down rules, "netsh" does not show those rules
+  * Missing search features ("find rules with any/any local ports and any/any remote ports" criteria)
+1. Incomplete Logging features
+  * Built-in firewall logging is disabled by default
+  * Built-in firewall logging does not show executable associated with a blocked packet
+  * No command line access to logs in a reasonable format
 
 ## Requirements
 
