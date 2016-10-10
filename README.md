@@ -425,9 +425,9 @@ Example: List enabled, group policy rules
 ```
 
 ## Version history
-* **0.1** (2016-10-08) - Initial release. Documentation of status and rule subcommands.
-* **0.2** (2016-10-XX) - Documentation of log subcommands.
-* **0.3** (2016-11-XX) - Release of msfw binary with status, rule, and log subcommands.
+* **0.1** (2016-10-09) - Initial release. Release of msfw binary with status, rule, and log subcommands.
+* **0.2** (2016-10-XX) - Bug fixes.
+* **0.3** (2016-11-XX) - Release of msfw binary with reformat of status command and display network connections
 * **0.4** (2016-11-XX) - Bug fixes.
 * **0.5** (2016-12-XX) - Release of msfw binary with status change and log change subcommands.
 * **0.6** (2016-12-XX) - Bug fixes.
