@@ -8,10 +8,10 @@
 
 ## Why
 
-1. No completed CLI solution for configuring or monitoring
+1. No complete CLI solution for configuring or monitoring
   * CLI solution does not list results in a tabular format
   * Does not work in an enterprise environment as it does not show group policy status (if group policy enables firewall, built in tool does not show firewall as running)
-  * Overcomplicated commands (in my opinion) and missing features (find rules that meet 'X' criteria)
+  * Overly complicated commands (in my opinion) and missing features (find rules that meet 'X' criteria)
 1. Incomplete Logging
   * Built-in logging is disabled by default
   * Built-in logging does not show executable associated with a blocked packet
@@ -27,24 +27,38 @@
 On Windows, a network connection is assigned a "profile": Domain, Private, or Public. The Microsoft firewall can be enabled/disabled for any or all profiles. Similarly, rules can be configured for any or all profiles.
 
 ```
-> msfw -h
+> msfw
+  status    Display firewall status.
+  rule      Display firewall rules.
+  log       Display firewall log.
+
+> msfw status -h
+  -p, --profile    (Default: ) Firewall profile.
+  
+> msfw rule -h
 msfw 0.1
-  status
-    -p, --profile     (Default: all) Firewall profile.
-  rule
-    -l, --list        (Default: False) List out rules
-    -c, --count       (Default: False) Count rules
-    -p, --profile     (Default: all) Firewall profile.
-    -n, --rulename    (Default: ) Rule Name
-    --dir             (Default: ) Rule Direction [in, out]
-    --status          (Default: enabled) Rule Status [enabled,disabled,all]
-    --scope           (Default: False) Rule Scope [local,policy]
-    --action          (Default: ) Rule Action [allow, block]
-    --local           (Default: System.String[]) Rule Local Address and Ports
-    --remote          (Default: System.String[]) Rule Remote Address and Ports
-    --protocol        (Default: ) Rule Protocol
-    --app             (Default: ) Rule Application or Service
-    --help            Display this help screen.
+  -l, --list        (Default: False) List out rules
+  -c, --count       (Default: False) Count rules
+  -p, --profile     (Default: ) Firewall profile.
+  -n, --rulename    (Default: ) Rule Name
+  --action          (Default: ) Rule Action [allow, block]
+  --app             (Default: ) Rule Application or Service
+  --dir             (Default: ) Rule Direction [in, out]
+  --local           (Default: System.String[]) Rule Local Address and Ports
+  --protocol        (Default: ) Rule Protocol
+  --remote          (Default: System.String[]) Rule Remote Address and Ports
+  --status          (Default: enabled) Rule Status [enabled,disabled,all]
+  --scope           (Default: ) Include local and/or group policy rules
+  
+> msfw log -h
+  -e, --enable     (Default: False) Enable log
+  -d, --disable    (Default: False) Disable log
+  -s, --status     (Default: False) Display Status
+  -l, --list       (Default: False) Display Blocked Connections
+  --since          (Default: ) Filter by time since datetime string
+  --last           (Default: ) Filter by time in last seconds, minutes, or
+                   hours
+  --shortapp       (Default: False) Display executable name only in log output
 ```
 
 ## Configure Firewall
