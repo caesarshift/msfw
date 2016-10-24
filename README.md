@@ -1,6 +1,6 @@
 # Microsoft&reg; Firewall (msfw)
 
-**Please note that this tool is not affiliated with, created by, or associated with Microsoft Corporation.**
+**Please note that this tool is not affiliated with or created by Microsoft Corporation.**
 
 *Microsoft, Encarta, MSN, and Windows are either registered trademarks or trademarks of Microsoft Corporation in the United States and/or other countries.*
 
@@ -24,43 +24,94 @@
 * Windows 7 or newer with .NET 3.5+
 * For some functions, administrative privileges are required
 
+## Download
+
+| Release                                                                               | MD5                               | SHA1                                     |
+|---------------------------------------------------------------------------------------|-----------------------------------|------------------------------------------|
+| [msfw v0.2](https://github.com/caesarshift/msfw/releases/download/v0.2/msfw-v0.2.zip) | e82d23ff59fc9ae9f1c9754338138914  | 685743552b8b032f6f091555b03c06ded65a8627 |
+| [msfw v0.1](https://github.com/caesarshift/msfw/releases/download/v0.1/msfw-v0.1.zip) | 44dacb1099cefbc3450f4429e08f9838  | 77d1b2c7797b0b04904a2c8ae5a12974465cccb0 |
+
+* On Windows, run `certutil -hashfile msfw-v0.2 MD5` OR `certutil -hashfile msfw-v0.2 SHA1` to calculate hashfile
+
 ## Getting Started
 
 On Windows, a network connection is assigned a "profile": Domain, Private, or Public. The Microsoft firewall can be enabled/disabled for any or all profiles. Similarly, rules can be configured for any or all profiles.
 
 ```
-> msfw
-  status    Display firewall status.
-  rule      Display firewall rules.
-  log       Display firewall log.
+> msfw -h
+  status          Display firewall status.
+  interface       Display included/excluded network interfaces.
+  log             Display firewall log.
+  rule            Display firewall rules.
+  addrule         Add firewall rules.
+  delrule         Delete firewall rules.
+  updinterface    Update included/excluded interfaces.
+  updlog          Enable/Disable firewall log.
+  updstatus       Change firewall status.
 
 > msfw status -h
-  -p, --profile    (Default: ) Firewall profile.
-  
+  -p, --profile      (Default: ) Firewall profile.
+  -i, --interface    (Default: False) List status by interface
+
+> msfw interface -h
+  -n, --interfacename    (Default: ) Interface Name
+
 > msfw rule -h
-msfw 0.1
   -l, --list        (Default: False) List out rules
   -c, --count       (Default: False) Count rules
+  --scope           (Default: ) Include local and/or group policy rules
+  --shortapp        (Default: False) Display executable name only in log output
+  --string          (Default: False) Display rule as a string
   -p, --profile     (Default: ) Firewall profile.
   -n, --rulename    (Default: ) Rule Name
-  --action          (Default: ) Rule Action [allow, block]
-  --app             (Default: ) Rule Application or Service
   --dir             (Default: ) Rule Direction [in, out]
+  --status          (Default: enabled) Rule Status [enabled,disabled,all]
+  --action          (Default: ) Rule Action [allow, block]
+  --local           (Default: System.String[]) Rule Local Address and Ports
+  --remote          (Default: System.String[]) Rule Remote Address and Ports
+  --protocol        (Default: ) Rule Protocol
+  --app             (Default: ) Rule Application or Service
+  --ext             (Default: ) Rule Extended attributes
+  
+$ msfw log -h
+  -s, --status    (Default: False) Display Status
+  -l, --list      (Default: False) Display Blocked Connections
+  -t, --tail      (Default: False) Tail Blocked Connections events
+  --since         (Default: ) Filter by time since datetime string
+  --last          (Default: ) Filter by time in last seconds, minutes, or hours
+  --shortapp      (Default: False) Display executable name only in log output
+
+> msfw addrule -h
+  -p, --profile     (Default: ) Firewall profile.
+  -n, --rulename    (Default: ) Rule Name. REQUIRED.
+  --action          (Default: ) Rule Action [allow, block]. REQUIRED.
+  --app             (Default: ) Rule Application or Service
+  --dir             (Default: ) Rule Direction [in, out]. REQUIRED.
   --local           (Default: System.String[]) Rule Local Address and Ports
   --protocol        (Default: ) Rule Protocol
   --remote          (Default: System.String[]) Rule Remote Address and Ports
   --status          (Default: enabled) Rule Status [enabled,disabled,all]
   --scope           (Default: ) Include local and/or group policy rules
-  
-> msfw log -h
+
+$ msfw delrule -h
+  -n, --rulename        (Default: ) Rule Name
+  --alllocaldisabled    (Default: False) Delete all local disabled rules
+
+> msfw updinterface -h
+  -p, --profile          (Default: ) Firewall profile.
+  -n, --interfacename    (Default: ) Interface Name
+  -e, --exclude          (Default: False) Exclude this interface
+  -i, --include          (Default: False) Include this interface
+
+$ msfw updlog -h
   -e, --enable     (Default: False) Enable log
-  -d, --disable    (Default: False) Disable log
-  -s, --status     (Default: False) Display Status
-  -l, --list       (Default: False) Display Blocked Connections
-  --since          (Default: ) Filter by time since datetime string
-  --last           (Default: ) Filter by time in last seconds, minutes, or
-                   hours
-  --shortapp       (Default: False) Display executable name only in log output
+  -d, --disable    (Default: False) Disable log  
+
+> msfw updstatus -h
+  -p, --profile     (Default: ) Firewall profile.
+  -s, --status      (Default: ) TODO: Enabled/Disable Firewall [enable,disable]
+  -i, --inbound     (Default: ) Set default inbound action [allow,block]
+  -o, --outbound    (Default: ) Set default outbound action [allow,block]
 ```
 
 ## Configure Firewall
@@ -68,26 +119,67 @@ To see if your firewall is currently enabled, run the following:
 
 ### **```msfw status```**
 
-**`msfw status`** : Display firewall status information
-
-```
-> msfw status
-'Windows Firewall' Service: Running
-Domain: Enabled:Inactive
-Private: Enabled:Active
-Public: Enabled:Inactive
-```
+Definition: Display firewall status information.
 
 * "Enabled": Firewall is turned on
 * "Disabled": Firewall is turned off
 * "Active": Firewall is associated with a profile that has at least one active network connection
 * "Inactive": Firewall is not associated with a profile that has an active network connection
+* "Inbound": Default action [block,allow] for inbound traffic
+* "Outbound": Default action [block,allow] for outbound traffic
+* "Interface": Network adapter name
+* "Network": Network name
+* "Excluded": If interface is excluded from the firewall
 
-**`msfw status -p [domain|private|public]`** : Display firewall status information for a profile
+Syntax: **`msfw status -p [domain|private|public] [-i]`**
 
+Example:
 ```
-> msfw status -p private
-Private: Enabled:Active
+> msfw status
+"Profile","Status","Active","Inbound","Outbound"
+"Domain","Enabled","Active","Allow","Allow"
+"Private","Enabled","Active","Allow","Allow"
+"Public","Enabled","Inactive","Block","Allow"
+```
+
+Example by profile:
+```
+> msfw status -p domain
+"Profile","Status","Active","Inbound","Outbound"
+"Domain","Enabled","Active","Allow","Allow"
+```
+
+Example by interface (Inactive profiles will have blank interface names):
+```
+> msfw status -i
+"Profile","Status","Active","Inbound","Outbound","Interface","Network","Excluded"
+"Domain","Enabled","Inactive","Allow","Allow","","",""
+"Private","Enabled","Active","Allow","Allow","Wireless Network Connection","myhomenetwork","Included"
+"Public","Enabled","Inactive","Block","Allow","","",""
+```
+
+### **```msfw interface```**
+
+Definition: Display list of interfaces.
+
+NOTE: Firewall Profiles <-> interfaces <-> networks. Most networks will only be connected to one interface, but it's possible to have 2 interfaces for 1 network. In that case, you must exclude both interfaces in order to exclude the network.
+
+Syntax: **`msfw interface -n <interfacename>`**
+
+Example:
+```
+> msfw interface
+"Interface","Domain","Private","Public"
+"Wireless Network Connection","Included","Included","Included"
+"Local Area Connection","Excluded","Included","Included"
+"VMware Network Adapter VMnet1","Included","Included","Included"
+"Loopback Pseudo-Interface 1","Included","Included","Included"
+```
+Example by interface name:
+```
+> msfw interface -n "local area connection"
+"Interface","Domain","Private","Public"
+"Local Area Connection","Excluded","Included","Included"
 ```
 
 ### **```msfw log```**  **(Requires admin privileges)**
@@ -102,34 +194,8 @@ Syntax: **`msfw log [-s,--status]`**
 
 Example:
 ```
-> msfw log -s
-Filter logging: True
-```
-
-#### ```msfw log --enable``` **(Requires admin privileges)**
-
-Definition: Enable firewall logging.
-
-Syntax: **`msfw log [-e,--enable]`**
-
-Example:
-```
-> msfw log -e
-Action: Enable log (requires admin privileges)
-The command was successfully executed.
-```
-
-#### ```msfw log --disable``` **(Requires admin privileges)**
-
-Definition: Disable firewall logging.
-
-Syntax: **`msfw log [-d,--disable]`**
-
-Example:
-```
-> msfw log -d
-Action: Disable log (requires admin privileges)
-The command was successfully executed.
+$ msfw log
+Logging Enabled: True
 ```
 
 #### ```msfw log --list``` **(Requires admin privileges)**
@@ -193,6 +259,42 @@ Example:
 Example:
 ```
 > msfw log -l --last 30s
+```
+
+#### ```msfw log -t``` **(Requires admin privileges)**
+
+Definition: Tail firewall log
+
+Syntax: **`msfw log -t`**
+
+### **```msfw updlog```**  **(Requires admin privileges)**
+
+Updates the log configuration.
+
+#### ```msfw updlog --enable``` **(Requires admin privileges)**
+
+Definition: Enable firewall logging.
+
+Syntax: **`msfw log [-e,--enable]`**
+
+Example:
+```
+> msfw updlog -e
+Action: Enable log (requires admin privileges)
+The command was successfully executed.
+```
+
+#### ```msfw updlog --disable``` **(Requires admin privileges)**
+
+Definition: Disable firewall logging.
+
+Syntax: **`msfw log [-d,--disable]`**
+
+Example:
+```
+> msfw updlog -d
+Action: Disable log (requires admin privileges)
+The command was successfully executed.
 ```
 
 ## Configure Rules
@@ -424,9 +526,114 @@ Example: List enabled, group policy rules
 > msfw rule -l --scope policy
 ```
 
+### ```msfw addrule```
+
+Create firewall rules
+
+#### ```msfw addrule -n <rulename> --dir [in,out] --action [allow,block]```
+
+Definition: Create a rule. Minimum required fields: rule name, direction, and action. Note that names do not have to be unique, but from a best practices, it's best to do so.
+
+Syntax: **`msfw addrule -n <rulename> --dir [in,out] --action [allow,block]`**
+
+Default: `--local *:* --remote *:* --protocol * --application * --profile *`
+
+Example: Create a rule blocking all inbound traffic
+```
+> msfw addrule -n "Hello, World" --dir in --action block
+Added rule: Hello World
+```
+
+Example: Create a rule blocking all inbound traffic to port 443
+```
+> > msfw addrule -n "Hello, World" --dir in --action block --local 443
+Added rule: Hello World
+```
+
+Example: Create a rule blocking all inbound traffic to port 443 (alternate)
+```
+> > msfw addrule -n "Hello, World" --dir in --action block --local *:443
+Added rule: Hello World
+```
+
+Example: Create a rule blocking all inbound traffic to IP 1.1.1.1 on ports 80 and 443
+```
+> > msfw addrule -n "Hello, World" --dir in --action block --local 1.1.1.1 80 443
+Added rule: Hello World
+```
+
+Example: Create a rule blocking all inbound traffic to IP 1.1.1.1 on ports 80 and 443 (alternate)
+```
+> > msfw addrule -n "Hello, World" --dir in --action block --local 1.1.1.1:80 1.1.1.1:443
+Added rule: Hello World
+```
+
+### ```msfw delrule```
+
+Delete firewall rules.
+
+#### ```msfw delrule -n <rulename>```
+
+Definition: Delete a rule. Minimum required fields: rule name
+
+Syntax: **`msfw delrule -n <rulename>`**
+
+Default: None
+
+Example: Delete all rules named "Hello, World"
+
+```
+> msfw delrule -n "Hello, World"
+Deleted 3 rule(s).
+```
+
+### ```msfw updinterface```
+
+Include or exclude interfaces from firewall.
+
+#### ```msfw updinterface -n <interfacename> [--include|--exclude] [-p domain|private|public]```
+
+Definition: Include or exclude an interface. Minimum required fields: rule name and action
+
+Syntax: **`msfw updinterface -n <interfacename> [--include|--exclude] [-p domain|private|public]`**
+
+Default: All profiles.
+
+Example: Exclude interface from all profiles
+
+```
+> msfw updinterface -n "local area connection" --exclude
+```
+
+Example: Exclude interface from domain profile
+
+```
+> msfw updinterface -n "local area connection" -p domain --exclude
+```
+
+Example: Include interface on all profiles
+
+```
+> msfw updinterface -n "local area connection" --include
+```
+
+### ```msfw updstatus```
+
+Enabled/Disable firewall or change inbound/outbound default actions.
+
+Example: Change default inbound action for the public profile to block
+```
+> msfw updstatus -p public -i block
+```
+
+Example: Change default outbound action for the public profile to block
+```
+> msfw updstatus -p public -i block
+```
+
 ## Version history
 * **0.1** (2016-10-09) - Initial release. Release of msfw binary with status, rule, and log subcommands.
-* **0.2** (2016-10-XX) - Bug fixes.
+* **0.2** (2016-10-24) - Bug fixes. Release of msfw binary with log -t (tail log), status -i (by interface), interface, updinterface, addrule, and delrule. Reformatted status output.
 * **0.3** (2016-11-XX) - Release of msfw binary with reformat of status command and display network connections
 * **0.4** (2016-11-XX) - Bug fixes.
 * **0.5** (2016-12-XX) - Release of msfw binary with status change and log change subcommands.
@@ -440,3 +647,4 @@ msfw is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.
 ## Other libraries used by msfw
 
 [CommandLineParser](https://github.com/gsscoder/commandline) *(MIT License)*
+[NLog](https://github.com/NLog/NLog) *(BSD-3-License)*
