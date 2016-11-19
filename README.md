@@ -162,7 +162,7 @@ Example by interface (Inactive profiles will have blank interface names):
 
 Definition: Display list of interfaces.
 
-NOTE: Firewall Profiles <-> interfaces <-> networks. Most networks will only be connected to one interface, but it's possible to have 2 interfaces for 1 network. In that case, you must exclude both interfaces in order to exclude the network.
+NOTE: Firewall Profiles <-> interfaces <-> networks. Most networks will only be connected to one interface, but it's possible to have 2 (or more) interfaces for 1 network. In that case, you must exclude both interfaces in order to exclude the network. 
 
 Syntax: **`msfw interface -n <interfacename>`**
 
@@ -184,7 +184,7 @@ Example by interface name:
 
 ### **```msfw log```**  **(Requires admin privileges)**
 
-Displays the "Filtering Platform Packet Drop" auditing of failures. The built-in firewall logging is not used as it does not display the application/service name associated with a blocked packet. The drawback is that filtering cannot be enabled for a specific profile.
+Displays the "Filtering Platform Packet Drop" auditing of failures. The built-in firewall logging is not used as it does not display the application/service name associated with a blocked packet. The drawback is that log filtering cannot be scoped to a specific profile.
 
 #### ```msfw log --status``` **(Requires admin privileges)**
 
@@ -200,7 +200,7 @@ Logging Enabled: True
 
 #### ```msfw log --list``` **(Requires admin privileges)**
 
-Definition: List firewall logs.
+Definition: List firewall blocked records.
 
 Syntax: **`msfw log [-l,--list]`**
 
@@ -299,7 +299,7 @@ The command was successfully executed.
 
 ## Configure Rules
 
-Rules, additionally, can be created locally or pushed down via group policy. Rules can also be disabled/enabled.
+Firewall rules can be created locally or pushed down via group policy. Rules can also be disabled/enabled.
 
 ### ```msfw rule```
 
@@ -532,7 +532,7 @@ Create firewall rules
 
 #### ```msfw addrule -n <rulename> --dir [in,out] --action [allow,block]```
 
-Definition: Create a rule. Minimum required fields: rule name, direction, and action. Note that names do not have to be unique, but from a best practices, it's best to do so.
+Definition: Create a rule. Minimum required fields: rule name, direction, and action. Note that names do not have to be unique, but from a best practices perspective, it's a good idea to do so.
 
 Syntax: **`msfw addrule -n <rulename> --dir [in,out] --action [allow,block]`**
 
@@ -619,7 +619,7 @@ Example: Include interface on all profiles
 
 ### ```msfw updstatus```
 
-Enabled/Disable firewall or change inbound/outbound default actions.
+Enable/Disable firewall or change inbound/outbound default actions.
 
 Example: Change default inbound action for the public profile to block
 ```
@@ -646,5 +646,5 @@ msfw is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.
 
 ## Other libraries used by msfw
 
-[CommandLineParser](https://github.com/gsscoder/commandline) *(MIT License)*
-[NLog](https://github.com/NLog/NLog) *(BSD-3-License)*
+* [CommandLineParser](https://github.com/gsscoder/commandline) *(MIT License)*
+* [NLog](https://github.com/NLog/NLog) *(BSD-3-License)*
