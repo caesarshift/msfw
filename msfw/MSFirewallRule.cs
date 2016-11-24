@@ -242,7 +242,7 @@ namespace msfw
                         }
                         else
                         {
-                            throw new Exception("Uknown defer: {0}" + kv[1]);
+                            rule.EdgeTraversalOptions = (int)Enum.Parse(typeof(NET_FW_EDGE_TRAVERSAL_TYPE_), kv[1]);
                         }
                         break;
                     case "Desc":

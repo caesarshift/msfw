@@ -47,6 +47,7 @@ namespace msfw
     //warning: since commandline does not support enums as array values,
     //the addrule verb uses strings to match. If you change this enum,
     //you must update addrule too.
+    //pull request: https://github.com/gsscoder/commandline/pull/148
     enum ProfileType
     {
         @do,
@@ -211,6 +212,11 @@ namespace msfw
         [Option("alllocaldisabled", DefaultValue = false,
         HelpText = "Delete all local disabled rules")]
         public bool RuleDeleteLocalDisabled { get; set; }
+
+        [Option('f', "force", DefaultValue = false,
+        HelpText = "Force delete of rule, even if multiple rules exist")]
+        public bool RuleDeleteForce { get; set; }
+
     }
 
     class StatusSubOptions
@@ -230,6 +236,14 @@ namespace msfw
         HelpText = "List out rules", MutuallyExclusiveSet = "ruleaction")]
         public bool List { get; set; }
 
+        [Option('d', "duplicates", DefaultValue = false,
+        HelpText = "List out duplicate rules", MutuallyExclusiveSet = "ruleaction")]
+        public bool Duplicates { get; set; }
+
+        [Option("profileduplicates", DefaultValue = false,
+        HelpText = "List out rules that differ only by profile", MutuallyExclusiveSet = "ruleaction")]
+        public bool ProfileDuplicates { get; set; }
+
         [Option('c', "count", DefaultValue = false,
         HelpText = "Count rules", MutuallyExclusiveSet = "ruleaction")]
         public bool Count { get; set; }
@@ -245,7 +259,6 @@ namespace msfw
         [Option("string", DefaultValue = false,
         HelpText = "Display rule as a string")]
         public bool RuleAsString { get; set; }
-
     }
 
     //requires admin
@@ -666,6 +679,8 @@ namespace msfw
             {
                 var ruleSubOptions = (RuleSubOptions)invokedVerbInstance;
                 var ruleList = new List<MSFirewallRule>();
+                var dupList = new Dictionary<string,int>();
+                var dupListWithoutProfile = new Dictionary<string, int>();
 
                 if (ruleSubOptions.RuleScope != "" && ruleSubOptions.RuleScope.Substring(0, 1).ToLower() == "l")
                 {
@@ -684,6 +699,37 @@ namespace msfw
                 {
                     endProgOnError("Unknown scope. Use '--scope local' or '--scope policy'");
                 }
+
+                if (ruleSubOptions.Duplicates)
+                {
+                    foreach(var r in ruleList)
+                    {
+                        if (dupList.ContainsKey(r.ToString())) {
+                            dupList[r.ToString()] = 1;
+                        } else {
+                            dupList[r.ToString()] = 0;
+                        }
+                    }
+                }
+
+                if (ruleSubOptions.ProfileDuplicates)
+                {
+                    foreach (var r in ruleList)
+                    {
+                        var dr = new MSFirewallRule(r.ToString());
+                        dr.rule.Profiles = (int)NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_ALL; // hrm...make a profile setter?
+
+                        if (dupListWithoutProfile.ContainsKey(dr.ToString()))
+                        {
+                            dupListWithoutProfile[dr.ToString()] = 1;
+                        }
+                        else
+                        {
+                            dupListWithoutProfile[dr.ToString()] = 0;
+                        }
+                    }
+                }
+
 
                 var ruleCnt = 0;
 
@@ -774,6 +820,17 @@ namespace msfw
                     }
 
                     // direction app srcip srcport dstip dstport protocol
+
+                    if(ruleSubOptions.Duplicates) {
+                        found["Duplicates"] = (dupList[rule.ToString()] == 1);
+                    }
+
+                    if(ruleSubOptions.ProfileDuplicates) {
+                        var dr = new MSFirewallRule(rule.ToString());
+                        dr.rule.Profiles = (int)NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_ALL; // hrm...make a profile setter?
+
+                        found["ProfileDuplicates"] = (dupListWithoutProfile[dr.ToString()] == 1);
+                    }
 
                     if (found.All(f => f.Value == true))
                     {
@@ -1119,6 +1176,15 @@ namespace msfw
 
                     try
                     {
+                        var existing = msfw.countLocalRules(deleteRuleSubOptions.RuleName);
+                        if (existing > 1 && !deleteRuleSubOptions.RuleDeleteForce)
+                        {
+                            Console.Write(existing + " rules found with this name. Are you sure you want to delete all of them? [y\\N]: ");
+                            var choice = Console.ReadLine();
+                            if (choice == "" || choice.Substring(0,1).ToLower() != "y") {
+                                Environment.Exit(0);
+                            }
+                        }
                         cnt = msfw.deleteLocalRule(deleteRuleSubOptions.RuleName);
                     }
                     catch(UnauthorizedAccessException)
@@ -1318,32 +1384,6 @@ namespace msfw
             }
 
             return profiles;
-        }
-
-        public static List<NET_FW_PROFILE_TYPE2_> getProfilesInScope(ProfileType[] profiles)
-        {
-            var retProfiles = new List<NET_FW_PROFILE_TYPE2_>();
-
-            foreach (var pt in profiles)
-            {
-                switch (pt.ToString())
-                {
-                    case "do":
-                    case "domain":
-                        retProfiles.Add(NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_DOMAIN);
-                        break;
-                    case "private":
-                    case "pr":
-                        retProfiles.Add(NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE);
-                        break;
-                    case "public":
-                    case "pu":
-                        retProfiles.Add(NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC);
-                        break;
-                }
-            }
-
-            return retProfiles.Distinct().ToList();
         }
 
         public static List<NET_FW_PROFILE_TYPE2_> getProfilesInScope(NET_FW_PROFILE_TYPE2_ profile)
