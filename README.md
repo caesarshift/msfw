@@ -264,7 +264,7 @@ The command was successfully executed.
 
 ## Rules
 
-Firewall rules can be created locally or pushed down via group policy. Rules can also be disabled/enabled. By default, msfw only displays disabled rules. Override this behavior by passing in a value for --status.
+Firewall rules can be created locally or pushed down via group policy. Rules can also be disabled/enabled. By default, msfw only displays enabled rules. Override this behavior by passing in a value for --status.
 
 ### ```msfw rule ([-d,--duplicates] | [--profileduplicates] | [-c,--count] | [-l,--list])```
 
@@ -329,12 +329,12 @@ Example: List enabled rule with name "Rule Name"
 
 Example: List enabled, inbound rules
 ```
-> msfw rule -l --dir in"
+> msfw rule -l --dir in
 ```
 
 Example: List enabled, outbound rules
 ```
-> msfw rule -l --dir out"
+> msfw rule -l --dir out
 ```
 
 Example: List enabled, any:any local address/port rule
@@ -395,11 +395,6 @@ Example: List enabled, Windows service rules
 Example: List enabled, "java.exe" rules
 ```
 > msfw rule -l --app java.exe
-```
-
-Example: List enabled, Windows service rules
-```
-> msfw rule -l --app svchost.exe
 ```
 
 Example: List enabled, Windows service uPnP rules
@@ -509,10 +504,6 @@ Example: Change default outbound action for the public profile to block
 * **0.1** (2016-10-09) - Initial release. Release of msfw binary with status, rule, and log subcommands.
 * **0.2** (2016-10-24) - Bug fixes. Release of msfw binary with log -t (tail log), status -i (by interface), interface, updinterface, addrule, and delrule. Reformatted status output.
 * **0.3** (2016-11-23) - Bug fixes. List duplicates. Warn if multiple rules will be deleted.
-* **0.4** (2016-11-XX) - Bug fixes.
-* **0.5** (2016-12-XX) - Release of msfw binary with status change and log change subcommands.
-* **0.6** (2016-12-XX) - Bug fixes.
-* **1.0** (2017-01-01) - Release of code and msfw binary with rule creation subcommands.
 
 ## License
 
